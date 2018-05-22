@@ -7,6 +7,7 @@ import { Item } from '../../models/item';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-items',
@@ -24,6 +25,8 @@ export class ItemsComponent implements OnInit {
 
   constructor(
     private itemService: ItemService
+    ,
+    private authService: AuthService
     // private dialog: MatDialog
   ) { }
 

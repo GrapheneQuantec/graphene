@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { environment } from '../environments/environment.prod';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { AppComponent } from './app.component';
 import { ItemsComponent } from './components/items/items.component';
@@ -12,6 +14,7 @@ import { ItemsComponent } from './components/items/items.component';
 import { ItemService } from './services/item.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AddItemComponent } from './components/add-item/add-item.component';
+import { AuthService } from './services/auth.service';
 
 
 @NgModule({
@@ -25,9 +28,11 @@ import { AddItemComponent } from './components/add-item/add-item.component';
     BrowserModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase, 'graphene'),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
-  providers: [ItemService],
+  providers: [ItemService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

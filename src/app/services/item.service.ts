@@ -20,27 +20,27 @@ export class ItemService {
   constructor(public afs: AngularFirestore) { 
     // afs.firestore.settings({ timestampsInSnapshots: true });
 
-    var clicks = Rx.Observable.fromEvent(document, 'click');
-    var result = clicks.switchMap((ev) => Rx.Observable.interval(1000));
-    result.subscribe(x => console.log(x));
+//     var clicks = Rx.Observable.fromEvent(document, 'click');
+//     var result = clicks.switchMap((ev) => Rx.Observable.interval(1000));
+//     result.subscribe(x => console.log(x));
 
-var mar = firebase.firestore.CollectionReference;
-console.log("mar ", mar);
+// var mar = firebase.firestore.CollectionReference;
+// console.log("mar ", mar);
 
-    const year$ = new BehaviorSubject(null);
-    this.items = Observable.combineLatest(
-      this.year$
-    ).switchMap(year =>
-      afs.collection<Item>('Literature', ref => {
-        let query : firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
-        if (year) { query = query.orderBy("Year", 'desc') };
-        return query;
-      }).valueChanges()
-    );
+//     const year$ = new BehaviorSubject(null);
+//     this.items = Observable.combineLatest(
+//       this.year$
+//     ).switchMap(year =>
+//       afs.collection<Item>('Literature', ref => {
+//         let query : firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
+//         if (year) { query = query.orderBy("Year", 'desc') };
+//         return query;
+//       }).valueChanges()
+//     );
 
-    // , ref => ref.orderBy("Year", 'desc')
+//     // , ref => ref.orderBy("Year", 'desc')
 
-    console.log("this.items: ", this.items);
+//     console.log("this.items: ", this.items);
 
     // this.sizeFilter$ = new BehaviorSubject<string>(null);
     // this.colorFilter$ = new BehaviorSubject<string>(null);
@@ -60,16 +60,16 @@ console.log("mar ", mar);
   // console.log("this.items2: ", this.items);
   
 
-  // this.itemsCollection = afs.collection<Item>('Literature'); // sort: , ref => ref.orderBy("Year", 'desc')
+  this.itemsCollection = afs.collection<Item>('Literature'); // sort: , ref => ref.orderBy("Year", 'desc')
   
-      // this.items = this.itemsCollection.snapshotChanges()
-      // .map(actions => {
-      //   return actions.map(a => {
-      //     const data = a.payload.doc.data() as Item;
-      //     data.id = a.payload.doc.id;
-      //     return data;
-      //   })
-      // })
+      this.items = this.itemsCollection.snapshotChanges()
+      .map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as Item;
+          data.id = a.payload.doc.id;
+          return data;
+        })
+      })
 }
 
   
