@@ -16,7 +16,7 @@ import 'rxjs/add/operator/switchMap';
 @Injectable()
 export class AuthService {
 
-  private user: Observable<User>;
+  user$: Observable<User>;
   // private user: BehaviorSubject<User> = new BehaviorSubject(null)
   private userDetails: firebase.User = null;
 
@@ -24,15 +24,14 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private db: AngularFireDatabase,
-    private _firebaseAuth: AngularFireAuth,
-    private router: Router
+    private _firebaseAuth: AngularFireAuth
+    // ,
+    // private router: Router
   ) {
     // this.afs.firestore.settings({ timestampsInSnapshots: true });
 
-    this.user = this.afAuth.authState.switchMap(user => {
+    this.user$ = this.afAuth.authState.switchMap(user => {
       if (user) {
-
-
         return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
       }
       else {
@@ -45,7 +44,6 @@ export class AuthService {
     const provider = new firebase.auth.GoogleAuthProvider()
     return this.afAuth.auth.signInWithPopup(provider)
       .then(credential => {
-        console.log('credential: ', credential);
         this.updateUser(credential.user)
       })
   }
@@ -56,13 +54,43 @@ export class AuthService {
 
   private updateUser(authData) {
     const userData = new User(authData)
-    const ref = this.db.object('users/' + authData.uid)
-    ref.valueChanges()
-      .subscribe(user => {
-        if (!user) {
-          ref.update(userData)
-        }
-      })
+
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc('users/' + authData.uid);
+
+    const data: User = {
+      uid: authData.uid,
+      email: authData.email,
+      photoURL: authData.photoURL,
+      displayName: authData.displayName,
+      roles: {
+        reader: true
+      }
+    }
+
+    return userRef.set(data, { merge: true });
 
   }
+
+  canRead(user:User): boolean {
+    return this.checkAuthorization(user, [ 'admin', 'author', 'reader' ])
+  }
+
+  canEdit(user:User): boolean {
+    return this.checkAuthorization(user, [ 'admin', 'author' ])
+  }
+
+  canDelete(user:User): boolean {
+    return this.checkAuthorization(user, [ 'admin' ])
+  }
+
+  private checkAuthorization(user: User, allowedRoles: string[]): boolean {
+    if (!user) return false
+    for (const role of allowedRoles) {
+      if ( user.roles[role]) {
+        return true
+      }
+    }
+    return false
+  }
+
 }

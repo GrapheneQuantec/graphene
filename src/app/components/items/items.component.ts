@@ -22,13 +22,17 @@ export class ItemsComponent implements OnInit {
   isNewlyAdded: boolean = false;
   itemToEdit: Item;
   activeItemId: string;
+  user;
 
   constructor(
-    private itemService: ItemService
-    ,
-    private authService: AuthService
+    private itemService: ItemService,
+    public authService: AuthService
     // private dialog: MatDialog
-  ) { }
+  ) {
+
+    this.authService.user$.subscribe(user => this.user = user)
+
+  }
 
   ngOnInit() {
     this.itemService.getItems().subscribe(items => {
@@ -44,7 +48,7 @@ export class ItemsComponent implements OnInit {
     this.isAbstract = true;
     this.isDescription = false;
   }
-  
+
   showDescription() {
     this.isAbstract = false;
     this.isDescription = true;
@@ -52,10 +56,10 @@ export class ItemsComponent implements OnInit {
 
   activate(item: Item) {
 
-    if(this.activeItemId != item.id) {
-      if(this.isNewlyAdded) {
+    if (this.activeItemId != item.id) {
+      if (this.isNewlyAdded) {
 
-        if(confirm("Are you sure to delete " + this.activeItemId)) {
+        if (confirm("Are you sure to delete " + this.activeItemId)) {
           var itemToDelete = this.items.filter(x => x.id === this.activeItemId)[0];
           this.deleteItem(itemToDelete);
           this.isNewlyAdded = false;
@@ -82,10 +86,10 @@ export class ItemsComponent implements OnInit {
       Year: 2018
     }
 
-    this.itemService.addItem(item).then( (doc: Item) =>{
+    this.itemService.addItem(item).then((doc: Item) => {
       this.isNewlyAdded = true;
-    this.editState = true;
-    this.activeItemId = doc.id;
+      this.editState = true;
+      this.activeItemId = doc.id;
     });
   }
 

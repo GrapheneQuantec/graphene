@@ -1,83 +1,84 @@
 <h1>Graphene Quantec Library</h1>
 <!-- <div *ngIf="authService.user | async; then authenticated else quest"></div>
 <ng-template #guest> -->
-  <button *ngIf="!(authService.user | async)" (click)="authService.googleLogin()" class="btn green">Log in</button>
-<!-- </ng-template>
+  <button *ngIf="!(authService.user$ | async)" (click)="authService.googleLogin()" class="btn green">Log in</button>
+  <!-- </ng-template>
 <ng-template #authenticated> -->
-  <button *ngIf="authService.user | async" (click)="addItem()" class="btn green">Add publication</button>
-  <button *ngIf="authService.user | async" (click)="authService.signOut()" class="btn green">Log out</button>
-<!-- </ng-template> -->
-<button (click)="sortBy('Year')" class="btn green">Sort</button>
-
-<ul *ngFor="let item of items" class="collection">
-  <li (click)="activate(item)" class="collection-item float-container">
-    <div class="float-container">
-      <div class="float-image-left">
-        <a href="{{item.Link}}" target="_blank">
-          <img style="width:100%;" src="{{item.ImageUrl}}" alt="">
-        </a>
-      </div>
-      <div class="float-text-right">
-        <div style="margin-bottom: 12px;">
-          <strong>{{item.id}}</strong>, "
-          <a href="{{item.Link}}" target="_blank">{{item.Title}}</a>", {{item.Year}}</div>
-        <div>
-          <strong>Keywords</strong>: {{item.Keywords}}</div>
-        <div>
-          <div *ngIf="activeItemId == item.id" class="abstract">
+  <button *ngIf="authService.canEdit(user)" (click)="addItem()" class="btn green">Add publication</button>
+  <button *ngIf="authService.user$ | async" (click)="authService.signOut()" class="btn green">Log out</button>
+  <!-- </ng-template> -->
+  <button (click)="sortBy('Year')" class="btn green">Sort</button>
+  <div *ngIf="authService.canRead(user)">
+    <ul *ngFor="let item of items" class="collection">
+      <li (click)="activate(item)" class="collection-item float-container">
+        <div class="float-container">
+          <div class="float-image-left">
+            <a href="{{item.Link}}" target="_blank">
+              <img style="width:100%;" src="{{item.ImageUrl}}" alt="">
+            </a>
+          </div>
+          <div class="float-text-right">
+            <div style="margin-bottom: 12px;">
+              <strong>{{item.Author}}</strong>, "
+              <a href="{{item.Link}}" target="_blank">{{item.Title}}</a>", {{item.Year}}</div>
             <div>
-              <strong *ngIf="item.Abstract" (click)="showAbstract()">Abstract</strong>
-              <strong *ngIf="item.Description" (click)="showDescription()">Description</strong>
+              <strong>Keywords</strong>: {{item.Keywords}}</div>
+            <div>
+              <div *ngIf="activeItemId == item.id" class="abstract">
+                <div>
+                  <strong *ngIf="item.Abstract" (click)="showAbstract()">Abstract</strong>
+                  <strong *ngIf="item.Description" (click)="showDescription()">Description</strong>
+                </div>
+                <div *ngIf="isAbstract">{{item.Abstract}}</div>
+                <div *ngIf="isDescription">{{item.Description}}</div>
+              </div>
             </div>
-            <div *ngIf="isAbstract">{{item.Abstract}}</div>
-            <div *ngIf="isDescription">{{item.Description}}</div>
           </div>
         </div>
-      </div>
-    </div>
-    <a *ngIf="activeItemId == item.id && authService.user | async" href="#" class="secondary-content">
-      <i *ngIf="!editState" (click)="editItem($event, item)" class="fa fa-pencil"></i>
-      <i *ngIf="editState" (click)="clearState()" class="fa fa-compress"></i>
-    </a>
-    <div class="float-container" *ngIf="editState && activeItemId == item.id">
-      <form (ngSubmit)="updateItem(item)">
-        <div class="row">
-          <div class="input-field col s4">
-            <input type="text" placeholder="Add Author" [(ngModel)]="item.Author" name="Author">
-            <label class="active">Author</label>
-          </div>
-          <div class="input-field col s4">
-            <input type="text" placeholder="Add Title" [(ngModel)]="item.Title" name="Title">
-            <label class="active">Title</label>
-          </div>
-          <div class="input-field col s4">
-            <input type="number" placeholder="Add Year" [(ngModel)]="item.Year" name="Year">
-            <label class="active">Year</label>
-          </div>
-          <div class="input-field col s4">
-            <input type="text" placeholder="Add Link" [(ngModel)]="item.Link" name="Link">
-            <label class="active">Link</label>
-          </div>
-          <div class="input-field col s4">
-            <input type="text" placeholder="Add Image Url" [(ngModel)]="item.ImageUrl" name="ImageUrl">
-            <label class="active">Image Url</label>
-          </div>
-          <div class="input-field col s4">
-            <input type="text" placeholder="Add Keywords" [(ngModel)]="item.Keywords" name="Keywords">
-            <label class="active">Keywords</label>
-          </div>
-          <div class="input-field col s4">
-            <input type="text" placeholder="Add Abstract" [(ngModel)]="item.Abstract" name="Abstract">
-            <label class="active">Abstract</label>
-          </div>
-          <div class="input-field col s4">
-            <input type="text" placeholder="Add Description" [(ngModel)]="item.Description" name="Description">
-            <label class="active">Description</label>
-          </div>
-          <input type="submit" value="Update Item" class="btn orange">
-          <button (click)="deleteItem(item)" class="btn red">DeleteItem</button>
+        <a *ngIf="activeItemId == item.id && authService.canEdit(user)" href="#" class="secondary-content">
+          <i *ngIf="!editState" (click)="editItem($event, item)" class="fa fa-pencil"></i>
+          <i *ngIf="editState" (click)="clearState()" class="fa fa-compress"></i>
+        </a>
+        <div class="float-container" *ngIf="editState && activeItemId == item.id">
+          <form (ngSubmit)="updateItem(item)">
+            <div class="row">
+              <div class="input-field col s4">
+                <input type="text" placeholder="Add Author" [(ngModel)]="item.Author" name="Author">
+                <label class="active">Author</label>
+              </div>
+              <div class="input-field col s4">
+                <input type="text" placeholder="Add Title" [(ngModel)]="item.Title" name="Title">
+                <label class="active">Title</label>
+              </div>
+              <div class="input-field col s4">
+                <input type="number" placeholder="Add Year" [(ngModel)]="item.Year" name="Year">
+                <label class="active">Year</label>
+              </div>
+              <div class="input-field col s4">
+                <input type="text" placeholder="Add Link" [(ngModel)]="item.Link" name="Link">
+                <label class="active">Link</label>
+              </div>
+              <div class="input-field col s4">
+                <input type="text" placeholder="Add Image Url" [(ngModel)]="item.ImageUrl" name="ImageUrl">
+                <label class="active">Image Url</label>
+              </div>
+              <div class="input-field col s4">
+                <input type="text" placeholder="Add Keywords" [(ngModel)]="item.Keywords" name="Keywords">
+                <label class="active">Keywords</label>
+              </div>
+              <div class="input-field col s4">
+                <input type="text" placeholder="Add Abstract" [(ngModel)]="item.Abstract" name="Abstract">
+                <label class="active">Abstract</label>
+              </div>
+              <div class="input-field col s4">
+                <input type="text" placeholder="Add Description" [(ngModel)]="item.Description" name="Description">
+                <label class="active">Description</label>
+              </div>
+              <input type="submit" value="Update Item" class="btn orange">
+              <button *ngIf="authService.canDelete(user)" (click)="deleteItem(item)" class="btn red">DeleteItem</button>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
-  </li>
-</ul>
+      </li>
+    </ul>
+  </div>
