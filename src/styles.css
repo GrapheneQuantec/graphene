@@ -1,0 +1,39 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+body {
+    color: #900000;
+    font-size: 18px;
+    background-image: url('https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/Vfv9BDZagiltwcyiq/loopable-graphene-structure-rows-of-carbon-atoms-honeycombs_hdeqeh1gi__F0000.png');
+}
+
+h1 {
+    text-align: center;
+    font-size: 48px;
+    text-shadow: -1px 0 #d89b00, 0 1px #fff1cd, 1px 0 #fff1cd, 0 -1px #fff1cd;
+}
+
+.collection{
+    border: 0;
+    border: 2px solid #900000;
+    border-radius: 6px;
+}
+
+.collection .collection-item {
+    background-color: rgb(255, 241, 205);
+}
+
+.float-container {
+    float: left;
+    width: 100%;
+}
+
+.float-image-left {
+    float: left;
+    width: 20%;
+}
+
+.float-text-right {
+    float: right;
+    width: 78%;
+}
