@@ -42,6 +42,11 @@ export class AuthService {
 
   googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider()
+
+    provider.setCustomParameters({
+       prompt: 'select_account'
+    });
+
     return this.afAuth.auth.signInWithPopup(provider)
       .then(credential => {
         this.updateUser(credential.user)
