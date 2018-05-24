@@ -8,7 +8,7 @@
     <button *ngIf="!(authService.user$ | async)" (click)="authService.googleLogin()" class="btn green">Log in</button>
     <button *ngIf="authService.user$ | async" (click)="authService.signOut()" class="btn red">Log out</button>
   </div>
-  <div>
+  <div *ngIf="(authService.user$ | async)">
     <button *ngIf="authService.canAddOrDelete(user)" (click)="addItem()" class="btn green">Add publication</button>
     <button (click)="sortBy('Year')" class="btn green">Sort by Year</button>
     <button (click)="sortBy('Title')" class="btn green">Sort by Title</button>
