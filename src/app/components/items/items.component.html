@@ -1,13 +1,20 @@
 <h1>Graphene Quantec Library</h1>
-<!-- <div *ngIf="authService.user | async; then authenticated else quest"></div>
-<ng-template #guest> -->
-  <button *ngIf="!(authService.user$ | async)" (click)="authService.googleLogin()" class="btn green">Log in</button>
-  <!-- </ng-template>
-<ng-template #authenticated> -->
-  <button *ngIf="authService.canEdit(user)" (click)="addItem()" class="btn green">Add publication</button>
-  <button *ngIf="authService.user$ | async" (click)="authService.signOut()" class="btn green">Log out</button>
-  <!-- </ng-template> -->
-  <button (click)="sortBy('Year')" class="btn green">Sort</button>
+  <div class="user-details">
+    
+    <span *ngIf="(authService.user$ | async)" class="btn orange username">
+      <img *ngIf="(authService.user$ | async)" src="{{user.photoURL}}" alt="">
+      <span>Hello <b>{{user.displayName}}</b>, you are <b>{{getRole()}}</b></span>
+    </span>
+    <button *ngIf="!(authService.user$ | async)" (click)="authService.googleLogin()" class="btn green">Log in</button>
+    <button *ngIf="authService.user$ | async" (click)="authService.signOut()" class="btn red">Log out</button>
+  </div>
+  <div>
+    <button *ngIf="authService.canAddOrDelete(user)" (click)="addItem()" class="btn green">Add publication</button>
+    <button (click)="sortBy('Year')" class="btn green">Sort by Year</button>
+    <button (click)="sortBy('Title')" class="btn green">Sort by Title</button>
+    <button (click)="getItems()" class="btn green">Clear sort</button>
+  </div>
+  
   <div *ngIf="authService.canRead(user)">
     <ul *ngFor="let item of items" class="collection">
       <li (click)="activate(item)" class="collection-item float-container">
@@ -75,7 +82,7 @@
                 <label class="active">Description</label>
               </div>
               <input type="submit" value="Update Item" class="btn orange">
-              <button *ngIf="authService.canDelete(user)" (click)="deleteItem(item)" class="btn red">DeleteItem</button>
+              <button *ngIf="authService.canAddOrDelete(user)" (click)="deleteItem(item)" class="btn red">DeleteItem</button>
             </div>
           </form>
         </div>

@@ -23,25 +23,38 @@ export class ItemsComponent implements OnInit {
   itemToEdit: Item;
   activeItemId: string;
   user;
+  isAscending: boolean;
 
   constructor(
     private itemService: ItemService,
     public authService: AuthService
     // private dialog: MatDialog
   ) {
-
-    this.authService.user$.subscribe(user => this.user = user)
-
+    this.authService.user$.subscribe(user => this.user = user);
   }
 
   ngOnInit() {
+    this.getItems();
+  }
+
+  getRole() {
+    if (this.user.roles.admin == true) return 'an admin';
+    if (this.user.roles.author == true) return 'an author';
+    if (this.user.roles.reader == true) return 'a reader';
+    return 'unknown'
+  }
+
+  getItems() {
     this.itemService.getItems().subscribe(items => {
       this.items = items;
     });
   }
 
   sortBy(sortName: string) {
-    this.itemService.sortCollection(sortName);
+    this.isAscending = !this.isAscending;
+    this.itemService.sortCollection(sortName, this.isAscending).subscribe(items => {
+      this.items = items;
+    });
   }
 
   showAbstract() {

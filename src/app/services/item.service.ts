@@ -16,6 +16,7 @@ export class ItemService {
   itemDoc: AngularFirestoreDocument<Item>;
   items$: Observable<Item[]>;
   year$: BehaviorSubject<string|null>;
+  afs$: AngularFirestore;
   
   constructor(public afs: AngularFirestore) { 
     // afs.firestore.settings({ timestampsInSnapshots: true });
@@ -59,25 +60,18 @@ export class ItemService {
   //   this.items= afs.collection<Item>('Literature').valueChanges();
   // console.log("this.items2: ", this.items);
   
-
-  this.itemsCollection = afs.collection<Item>('Literature'); // sort: , ref => ref.orderBy("Year", 'desc')
-  
-      this.items = this.itemsCollection.snapshotChanges()
-      .map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data() as Item;
-          data.id = a.payload.doc.id;
-          return data;
-        })
-      })
+  this.afs$ = afs;
+  this.getItems();
 }
 
   
 
-  sortCollection(sortName: string) {
-    console.log("this.itemsCollection before", this.itemsCollection);
-    this.itemsCollection.ref.orderBy(sortName, 'desc');
-    console.log("this.itemsCollection after", this.itemsCollection);
+  sortCollection(sortName: string, isAscending: boolean) {
+
+    var order:any = (isAscending) ? 'asc' : 'desc';
+
+    this.itemsCollection = this.afs$.collection<Item>('Literature' , ref => ref.orderBy(sortName, order)); // sort:
+// this.items = Observable.of(null);
     this.items = this.itemsCollection.snapshotChanges()
     .map(actions => {
       return actions.map(a => {
@@ -86,9 +80,21 @@ export class ItemService {
         return data;
       })
     })
+
+    return this.items;
   }
 
   getItems(){
+    this.itemsCollection = this.afs$.collection<Item>('Literature'); // sort: , ref => ref.orderBy("Year", 'desc')
+  
+    this.items = this.itemsCollection.snapshotChanges()
+    .map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Item;
+        data.id = a.payload.doc.id;
+        return data;
+      })
+    })
     return this.items;
   }
 

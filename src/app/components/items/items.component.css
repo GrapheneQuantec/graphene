@@ -1,3 +1,19 @@
 .abstract {
     margin-top: 10px;
 }
+
+.user-details {
+    margin-bottom: 12px;
+}
+
+.username {
+    padding-left: 0;
+    cursor: auto;
+    text-transform: none;
+}
+
+.username img {
+    margin-right: 15px;
+    height: inherit;
+    float: left;
+}

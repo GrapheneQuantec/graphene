@@ -84,7 +84,7 @@ export class AuthService {
     return this.checkAuthorization(user, [ 'admin', 'author' ])
   }
 
-  canDelete(user:User): boolean {
+  canAddOrDelete(user:User): boolean {
     return this.checkAuthorization(user, [ 'admin' ])
   }
 
