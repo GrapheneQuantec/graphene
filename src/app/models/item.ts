@@ -6,4 +6,6 @@ export interface Item {
     Link?: string;
     ImageUrl?: string;
     Keywords?: string;
+    Category?: string;
+    Step?: string;
 }

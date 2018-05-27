@@ -15,18 +15,20 @@ import { ItemService } from './services/item.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AddItemComponent } from './components/add-item/add-item.component';
 import { AuthService } from './services/auth.service';
+import { MaterializeModule } from "angular2-materialize";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ItemsComponent,
-    NavbarComponent,
+    NavbarComponent, 
     AddItemComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    MaterializeModule,
     AngularFireModule.initializeApp(environment.firebase, 'graphene'),
     AngularFirestoreModule,
     AngularFireDatabaseModule,

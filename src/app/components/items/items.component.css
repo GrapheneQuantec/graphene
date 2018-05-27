@@ -17,3 +17,22 @@
     height: inherit;
     float: left;
 }
+
+.normal-label {
+    top: 0;
+    font-size: 1rem;
+} 
+
+.select-wrapper {
+    background-color: #fff1cd;
+    padding: 0 15px;
+}
+
+.select-row {
+    background-color: #fff1cd;
+    border: 2px solid #900000;
+    border-radius: 6px;
+    margin: 0;
+    margin-bottom: 10px;
+    padding-top: 10px;
+}

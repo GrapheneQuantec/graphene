@@ -19,59 +19,15 @@ export class ItemService {
   afs$: AngularFirestore;
   
   constructor(public afs: AngularFirestore) { 
-    // afs.firestore.settings({ timestampsInSnapshots: true });
-
-//     var clicks = Rx.Observable.fromEvent(document, 'click');
-//     var result = clicks.switchMap((ev) => Rx.Observable.interval(1000));
-//     result.subscribe(x => console.log(x));
-
-// var mar = firebase.firestore.CollectionReference;
-// console.log("mar ", mar);
-
-//     const year$ = new BehaviorSubject(null);
-//     this.items = Observable.combineLatest(
-//       this.year$
-//     ).switchMap(year =>
-//       afs.collection<Item>('Literature', ref => {
-//         let query : firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
-//         if (year) { query = query.orderBy("Year", 'desc') };
-//         return query;
-//       }).valueChanges()
-//     );
-
-//     // , ref => ref.orderBy("Year", 'desc')
-
-//     console.log("this.items: ", this.items);
-
-    // this.sizeFilter$ = new BehaviorSubject<string>(null);
-    // this.colorFilter$ = new BehaviorSubject<string>(null);
-    // this.items$ = Observable.combineLatest(
-    //   this.sizeFilter$,
-    //   this.colorFilter$
-    // ).switchMap(([size, color]) => 
-    //   afs.collection('items', ref => {
-    //     let query : firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
-    //     if (size) { query = query.where('size', '==', size) };
-    //     if (color) { query = query.where('color', '==', color) };
-    //     return query;
-    //   }).valueChanges()
-    // );
-
-  //   this.items= afs.collection<Item>('Literature').valueChanges();
-  // console.log("this.items2: ", this.items);
-  
-  this.afs$ = afs;
-  this.getItems();
-}
-
-  
+    this.afs$ = afs;
+    this.getItems();
+  }
 
   sortCollection(sortName: string, isAscending: boolean) {
 
     var order:any = (isAscending) ? 'asc' : 'desc';
 
-    this.itemsCollection = this.afs$.collection<Item>('Literature' , ref => ref.orderBy(sortName, order)); // sort:
-// this.items = Observable.of(null);
+    this.itemsCollection = this.afs$.collection<Item>('Literature' , ref => ref.orderBy(sortName, order));
     this.items = this.itemsCollection.snapshotChanges()
     .map(actions => {
       return actions.map(a => {
@@ -84,9 +40,19 @@ export class ItemService {
     return this.items;
   }
 
-  getItems(){
-    this.itemsCollection = this.afs$.collection<Item>('Literature'); // sort: , ref => ref.orderBy("Year", 'desc')
-  
+
+  getItems(category?: string, step?: string){
+    if(category && category != 'All') {
+      if(step && step != 'All') {
+        this.itemsCollection = this.afs$.collection<Item>('Literature', ref => ref.where("Category", "==", category).where("Step", "==", step));
+      }
+      else {
+        this.itemsCollection = this.afs$.collection<Item>('Literature', ref => ref.where("Category", "==", category));
+      }
+    }
+    else {
+      this.itemsCollection = this.afs$.collection<Item>('Literature');
+    }
     this.items = this.itemsCollection.snapshotChanges()
     .map(actions => {
       return actions.map(a => {

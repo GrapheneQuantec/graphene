@@ -24,6 +24,31 @@ export class ItemsComponent implements OnInit {
   activeItemId: string;
   user;
   isAscending: boolean;
+  showSteps: boolean = false;
+  steps: any;
+
+  categories = [
+    {name: "All"},
+    {name: "Quantum Foundation"},
+    {name: "Graphene"}
+  ];
+  QFSteps = [
+    {name: "All"},
+    {name: "Photon resonances"},
+    {name: "GravitoElectroMagnetism"},
+    {name: "3D holograms"},
+    {name: "Quantum Brain Computers"},
+    {name: "Multi Unit Activity"},
+    {name: "Brain Computer Interfaces"}
+  ];
+  grapheneSteps = [
+    {name: "All"},
+    {name: "Electrotribology"},
+    {name: "Electrochemistry"},
+    {name: "Structural"}
+  ];
+  selectedCategory: string;
+  selectedStep: string;
 
   constructor(
     private itemService: ItemService,
@@ -45,7 +70,7 @@ export class ItemsComponent implements OnInit {
   }
 
   getItems() {
-    this.itemService.getItems().subscribe(items => {
+    this.itemService.getItems(this.selectedCategory, this.selectedStep).subscribe(items => {
       this.items = items;
     });
   }
@@ -80,11 +105,6 @@ export class ItemsComponent implements OnInit {
         else {
           return;
         }
-
-        // let dialogRef = this.dialog.open(UserProfileComponent, {
-        //   height: '400px',
-        //   width: '600px',
-        // });
       }
       this.activeItemId = item.id;
       this.isAbstract = true;
@@ -92,11 +112,16 @@ export class ItemsComponent implements OnInit {
     }
   }
 
+  closeItem(event) {
+    event.stopPropagation();
+    this.activeItemId = null;
+  }
+
   addItem() {
     var item: Item = {
       Author: '',
       Title: '',
-      Year: 2018
+      Year: 2019
     }
 
     this.itemService.addItem(item).then((doc: Item) => {
@@ -126,4 +151,19 @@ export class ItemsComponent implements OnInit {
     this.itemService.deleteItem(item);
   }
 
+  chooseCategory() {
+    if (this.selectedCategory != "All") {
+      this.showSteps = true;
+      if (this.selectedCategory == "Quantum Foundation"){
+        this.steps = this.QFSteps;
+      }
+      if (this.selectedCategory == "Graphene"){
+        this.steps = this.grapheneSteps;
+      }
+    } 
+    else {
+      this.showSteps = false;
+    }
+    this.getItems();
+  }
 }
