@@ -7,7 +7,12 @@
       <b>{{getRole()}}</b>
     </span>
   </span>
-  <button *ngIf="!(authService.user$ | async)" (click)="authService.googleLogin()" class="btn green">Log in</button>
+  <div *ngIf="!(authService.user$ | async)" class="login-container">
+    <div>
+      <img src="assets/nanotube.gif" alt="">
+    </div>
+    <button (click)="authService.googleLogin()" class="btn green">Log in</button>
+  </div>
   <button *ngIf="authService.user$ | async" (click)="authService.signOut()" class="btn red">Log out</button>
 </div>
 <div *ngIf="(authService.user$ | async)">
