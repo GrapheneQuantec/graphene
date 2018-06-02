@@ -14,7 +14,6 @@ import { ItemsComponent } from './components/items/items.component';
 import { PublicationsComponent } from './components/publications/publications.component';
 
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { AddItemComponent } from './components/add-item/add-item.component';
 import { MaterializeModule } from "angular2-materialize";
 
 import { AuthService } from './services/auth.service';
@@ -27,7 +26,6 @@ import { DoiService } from './services/doi.service';
     AppComponent,
     ItemsComponent,
     NavbarComponent, 
-    AddItemComponent,
     PublicationsComponent
   ],
   imports: [
