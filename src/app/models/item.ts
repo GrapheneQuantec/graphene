@@ -1,6 +1,6 @@
 export interface Item {
     id?: string;
-    Title?: string;
+    Title?: string[];
     Author?: string;
     Year?: number;
     Link?: string;

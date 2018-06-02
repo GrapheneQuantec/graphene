@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ItemService } from '../../services/item.service';
+import { DoiService } from '../../services/doi.service'
 import { Item } from '../../models/item';
+import { Publication } from 'publication';
 
 // import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 
@@ -26,6 +28,7 @@ export class ItemsComponent implements OnInit {
   isAscending: boolean;
   showSteps: boolean = false;
   steps: any;
+  doi: string;
 
   categories = [
     {name: "All"},
@@ -52,6 +55,7 @@ export class ItemsComponent implements OnInit {
 
   constructor(
     private itemService: ItemService,
+    private doiService: DoiService,
     public authService: AuthService
     // private dialog: MatDialog
   ) {
@@ -117,12 +121,32 @@ export class ItemsComponent implements OnInit {
     this.activeItemId = null;
   }
 
-  addItem() {
+  addItemFromDoi() {
+
+
+
+    this.doiService.getPublicationByDoi(this.doi).subscribe((publication: Publication) => {
+      console.log('publications', publication.status);
+      var item: Item = {
+        Author: publication.message.author[0].family,
+        Title: publication.message.title
+        // Year: publication.message.created
+      }
+      this.addItem(item);
+    });
+  }
+
+  addDefaultItem() {
     var item: Item = {
       Author: '',
-      Title: '',
+      Title: [],
       Year: 2019
     }
+
+    this.addItem(item);
+  }
+
+  addItem(item) {
 
     this.itemService.addItem(item).then((doc: Item) => {
       this.isNewlyAdded = true;
