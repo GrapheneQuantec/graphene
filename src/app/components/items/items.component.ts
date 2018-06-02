@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ItemService } from '../../services/item.service';
 import { DoiService } from '../../services/doi.service'
 import { Item } from '../../models/item';
-import { Publication } from 'publication';
+import { Publication } from '../../models/publication';
 
 // import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 
