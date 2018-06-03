@@ -29,26 +29,27 @@ export class ItemsComponent implements OnInit {
   showSteps: boolean = false;
   steps: any;
   doi: string;
+  citedAuthor: string;
 
   categories = [
-    {name: "All"},
-    {name: "Quantum Foundation"},
-    {name: "Graphene"}
+    { name: "All" },
+    { name: "Quantum Foundation" },
+    { name: "Graphene" }
   ];
   QFSteps = [
-    {name: "All"},
-    {name: "Photon resonances"},
-    {name: "GravitoElectroMagnetism"},
-    {name: "3D holograms"},
-    {name: "Quantum Brain Computers"},
-    {name: "Multi Unit Activity"},
-    {name: "Brain Computer Interfaces"}
+    { name: "All" },
+    { name: "Photon resonances" },
+    { name: "GravitoElectroMagnetism" },
+    { name: "3D holograms" },
+    { name: "Quantum Brain Computers" },
+    { name: "Multi Unit Activity" },
+    { name: "Brain Computer Interfaces" }
   ];
   grapheneSteps = [
-    {name: "All"},
-    {name: "Electrotribology"},
-    {name: "Electrochemistry"},
-    {name: "Structural"}
+    { name: "All" },
+    { name: "Electrotribology" },
+    { name: "Electrochemistry" },
+    { name: "Structural" }
   ];
   selectedCategory: string;
   selectedStep: string;
@@ -62,7 +63,8 @@ export class ItemsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.user$.subscribe(user => {this.user = user
+    this.authService.user$.subscribe(user => {
+      this.user = user
       this.getItems();
     });
   }
@@ -124,13 +126,22 @@ export class ItemsComponent implements OnInit {
 
   addItemFromDoi() {
 
-
+    // this.doi = '10.1016/j.exer.2018.05.010';
 
     this.doiService.getPublicationByDoi(this.doi).subscribe((publication: Publication) => {
-      console.log('publications', publication.status);
+
+      // get the first author from the authors array
+      var author = (publication.message.author && publication.message.author.length > 0)
+        ? publication.message.author[0].family + ', ' + publication.message.author[0].given : '';
+      // if there are more than one author then add et al.
+      var etAl = (publication.message.author && publication.message.author.length > 1) ? ', et al.' : '';
+
       var item: Item = {
-        Author: publication.message.author[0].family,
+        Link: publication.message.URL,
+        Authors: publication.message.author,
+        Author: author + etAl,
         Title: publication.message.title,
+        Issued: publication.message.issued["date-parts"][0],
         Inserted: {
           InsertorId: this.user.uid,
           Timestamp: Date.now()
@@ -180,6 +191,7 @@ export class ItemsComponent implements OnInit {
   }
 
   deleteItem(item: Item) {
+    this.isNewlyAdded = false;
     this.clearState();
     this.itemService.deleteItem(item);
   }
@@ -187,13 +199,13 @@ export class ItemsComponent implements OnInit {
   chooseCategory() {
     if (this.selectedCategory != "All") {
       this.showSteps = true;
-      if (this.selectedCategory == "Quantum Foundation"){
+      if (this.selectedCategory == "Quantum Foundation") {
         this.steps = this.QFSteps;
       }
-      if (this.selectedCategory == "Graphene"){
+      if (this.selectedCategory == "Graphene") {
         this.steps = this.grapheneSteps;
       }
-    } 
+    }
     else {
       this.showSteps = false;
     }

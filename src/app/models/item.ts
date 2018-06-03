@@ -1,8 +1,10 @@
 import { User } from "./user";
+import { Author } from "./publication";
 
 export interface Item {
     id?: string;
     Title?: string[];
+    Authors?: Author[];
     Author?: string;
     Year?: number;
     Link?: string;
@@ -11,6 +13,7 @@ export interface Item {
     Category?: string;
     Step?: string;
     Inserted?: Inserted;
+    Issued?: number[];
 }
 
 export interface Inserted {

@@ -58,7 +58,7 @@
         <div class="float-text-right">
           <div style="margin-bottom: 12px;">
             <strong>{{item.Author}}</strong>, "
-            <a href="{{item.Link}}" target="_blank">{{item.Title}}</a>", {{item.Year}}</div>
+            <a href="{{item.Link}}" target="_blank">{{item.Title}}</a>", {{(item.Issued && item.Issued.length > 0) ? item.Issued[0] : item.Year}}</div>
           <div>
             <strong>Keywords</strong>: {{item.Keywords}}</div>
           <div>
