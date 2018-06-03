@@ -59,11 +59,12 @@ export class ItemsComponent implements OnInit {
     public authService: AuthService
     // private dialog: MatDialog
   ) {
-    this.authService.user$.subscribe(user => this.user = user);
   }
 
   ngOnInit() {
-    this.getItems();
+    this.authService.user$.subscribe(user => {this.user = user
+      this.getItems();
+    });
   }
 
   getRole() {
@@ -129,7 +130,11 @@ export class ItemsComponent implements OnInit {
       console.log('publications', publication.status);
       var item: Item = {
         Author: publication.message.author[0].family,
-        Title: publication.message.title
+        Title: publication.message.title,
+        Inserted: {
+          InsertorId: this.user.uid,
+          Timestamp: Date.now()
+        }
         // Year: publication.message.created
       }
       this.addItem(item);
@@ -140,7 +145,11 @@ export class ItemsComponent implements OnInit {
     var item: Item = {
       Author: '',
       Title: [],
-      Year: 2019
+      Year: 2019,
+      Inserted: {
+        InsertorId: this.user.uid,
+        Timestamp: Date.now()
+      }
     }
 
     this.addItem(item);

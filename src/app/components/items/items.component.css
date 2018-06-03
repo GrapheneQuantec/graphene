@@ -36,11 +36,15 @@
     padding: 0 15px;
 }
 
-.select-row {
+.admin-row {
     background-color: #fff1cd;
     border: 2px solid #900000;
     border-radius: 6px;
     margin: 0;
     margin-bottom: 10px;
     padding-top: 10px;
+}
+
+.add-items-row input{
+    width: 200px;
 }

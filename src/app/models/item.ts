@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface Item {
     id?: string;
     Title?: string[];
@@ -8,4 +10,10 @@ export interface Item {
     Keywords?: string;
     Category?: string;
     Step?: string;
+    Inserted?: Inserted;
+}
+
+export interface Inserted {
+    InsertorId?: string;
+    Timestamp?: number;
 }

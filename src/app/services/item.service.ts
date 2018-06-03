@@ -51,7 +51,7 @@ export class ItemService {
       }
     }
     else {
-      this.itemsCollection = this.afs$.collection<Item>('Literature');
+      this.itemsCollection = this.afs$.collection<Item>('Literature', ref => ref.orderBy("Inserted.Timestamp", "desc"));
     }
     this.items = this.itemsCollection.snapshotChanges()
     .map(actions => {

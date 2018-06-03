@@ -16,7 +16,7 @@
   <button *ngIf="authService.user$ | async" (click)="authService.signOut()" class="btn red">Log out</button>
 </div>
 <div *ngIf="(authService.user$ | async)">
-  <div class="row select-row">
+  <div class="row admin-row">
     <div class="input-field custom-select col s4">
       <select name="categories" [(ngModel)]="selectedCategory" materialize="material_select" (change)="chooseCategory()">
         <option *ngFor="let category of categories" [ngValue]="category.name">{{category.name}}</option>
@@ -29,10 +29,14 @@
       </select>
       <label class="active normal-label">Step</label>
     </div>
-    <div *ngIf="authService.canAddOrDelete(user)" class="input-field col s4">
+  </div>
+  <div *ngIf="authService.canAddOrDelete(user)" class="row admin-row add-items-row">
+    <div class="input-field col s6">
         <button (click)="addDefaultItem()" class="btn green">Add publication</button>
-              <input type="text" placeholder="Add Doi" [(ngModel)]="doi" name="Author">
-              <button (click)="addItemFromDoi()" class="btn green">Add from DOI</button>
+    </div>
+    <div class="input-field col s6">
+      <input type="text" placeholder="Add Doi" [(ngModel)]="doi" name="Author">
+      <button (click)="addItemFromDoi()" class="btn green">Add from DOI</button>
     </div>
   </div>
   <div *ngIf="false">
