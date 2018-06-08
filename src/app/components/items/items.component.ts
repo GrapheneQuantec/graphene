@@ -132,7 +132,7 @@ export class ItemsComponent implements OnInit {
 
       // get the first author from the authors array
       var author = (publication.message.author && publication.message.author.length > 0)
-        ? publication.message.author[0].family + ', ' + publication.message.author[0].given : '';
+        ? publication.message.author[0].family + publication.message.author[0].given : '';
       // if there are more than one author then add et al.
       var etAl = (publication.message.author && publication.message.author.length > 1) ? ', et al.' : '';
 
